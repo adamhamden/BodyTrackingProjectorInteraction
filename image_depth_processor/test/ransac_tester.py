@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 #get plane equation 
 #generate random points
@@ -6,8 +6,10 @@
 #look at outcome 
 import numpy as np
 import random
+import sys 
 
-import ransac 
+sys.path.append('../modules/')
+import ransac
 
 
 test_plane = np.array([1, 1, 1, 0])

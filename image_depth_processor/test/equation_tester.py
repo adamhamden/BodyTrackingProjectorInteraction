@@ -3,8 +3,12 @@
 import unittest
 import math
 import numpy as np
+import time 
+import sys
+
+sys.path.append('../modules/')
 import plane_processor as file
-import time
+
 
 test_count = 0
 

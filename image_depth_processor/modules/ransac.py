@@ -1,8 +1,6 @@
 import numpy as np
 import random 
 import plane_processor as pt
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
 
 #reference: http://www.cse.psu.edu/~rtc12/CSE486/lecture15.pdf
 #reference: http://www.ipb.uni-bonn.de/pdfs/Yang2010Plane.pdf
@@ -34,7 +32,7 @@ def ransac(list_of_points, iterations):
 			max_points_captured = points_captured
 			best_plane = plane
 		
-		matches = 0		
+                matches = 0		
 		for val in list_of_pts_captured:
 			if abs((max_points_captured - val)/max_points_captured) < .1:
 				matches = matches + 1

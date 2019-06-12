@@ -4,31 +4,20 @@ from __future__ import print_function
 import roslib
 import sys
 import rospy
-import cv2
-from std_msgs.msg import String
-from sensor_msgs.msg import Image
-from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 import time 
+
 from rospy.numpy_msg import numpy_msg
 from rospy_tutorials.msg import Floats
-
-from sensor_msgs import point_cloud2 as pc2
-from sensor_msgs.msg import PointCloud2, PointField
-from std_msgs.msg import Header
-from body_tracker_msgs.msg import BodyTrackerArray, BodyTracker, Skeleton
 
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import random 
 
+sys.path.append('../modules/')
 import ransac
 import plane_processor as pt
 
-import math
-
-from rospy.numpy_msg import numpy_msg
-from rospy_tutorials.msg import Floats 
 class Queue:
 
     def __init__(self, max_length=100, type_check_function=None):

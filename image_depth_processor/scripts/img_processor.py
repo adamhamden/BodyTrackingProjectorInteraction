@@ -5,13 +5,12 @@ import roslib
 import sys
 import rospy
 import cv2
+
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
-import time 
-from rospy.numpy_msg import numpy_msg
-from rospy_tutorials.msg import Floats
+
 from matplotlib import pyplot as plt
 import cv2.xfeatures2d
 
