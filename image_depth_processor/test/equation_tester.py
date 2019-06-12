@@ -3,7 +3,7 @@
 import unittest
 import math
 import numpy as np
-import plane_test as file
+import plane_processor as file
 import time
 
 test_count = 0

@@ -1,14 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #get plane equation 
 #generate random points
 #put some noise 
 #look at outcome 
 import numpy as np
-import random 
-import plane_test as pt
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
+import random
 
 import ransac 
 
