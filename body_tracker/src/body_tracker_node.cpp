@@ -1039,7 +1039,7 @@ namespace nuitrack_body_tracker
   int main( int argc, char *argv[] )
   {
     using namespace nuitrack_body_tracker;
-    ros::init( argc, argv, "nuitrack_body_tracker" );
+    ros::init( argc, argv, "body_tracker" );
     nuitrack_body_tracker_node node(ros::this_node::getName());
     node.Init("");
     node.Run();

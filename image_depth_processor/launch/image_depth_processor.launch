@@ -1,0 +1,5 @@
+<launch>
+
+  <node pkg="image_depth_processor" name="img_processor" type="img_processor.py" output="screen"></node>
+
+</launch>
