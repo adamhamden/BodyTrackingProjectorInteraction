@@ -4,14 +4,10 @@ import unittest
 import math
 import numpy as np
 import time 
-import random
 import sys
 
 sys.path.append('../modules/')
 import plane_processor as file
-
-
-
 
 def arrayEqual(return_val, expected):
 	x= return_val
@@ -111,14 +107,13 @@ np.array([4.132,-1.2434,2.2]),
 np.array([3.14,1.59,2.65]),
 
 ]
+
 class TestSphere(unittest.TestCase):
 	def test_sphere_closest_point(self):
 		for center in centers:
 			for point in points_:
 				for r in radius:
 					self.assertAlmostEqual(file.distance_finder(file.sphere_closest_point(point, center, r), point), abs(file.distance_finder(point, center)-r),places=5)
-
-
 
 if __name__ == '__main__':
 	unittest.main()
