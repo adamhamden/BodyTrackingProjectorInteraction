@@ -86,11 +86,9 @@ def closest_point_to_plane(plane, sensor):
 def sphere_closest_point(sensor, center, radius):
 
 	vector = vector_finder(sensor, center)
-
 	unit_vector = vector / np.linalg.norm(vector)
-
 	sized_vector = radius * unit_vector
-
+	sized_vector = np.add(center,sized_vector)
 	return sized_vector
 
 

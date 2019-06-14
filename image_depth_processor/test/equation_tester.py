@@ -4,17 +4,16 @@ import unittest
 import math
 import numpy as np
 import time 
+import random
 import sys
 
 sys.path.append('../modules/')
 import plane_processor as file
 
 
-test_count = 0
 
-def assertEqual(return_val, expected):
-	global test_count	
-	test_count += 1
+
+def arrayEqual(return_val, expected):
 	x= return_val
 	y= expected
 	if x is not None and y is not None:
@@ -22,49 +21,104 @@ def assertEqual(return_val, expected):
 		y = np.around(np.absolute(expected/np.linalg.norm(expected)), decimals=5)
 	return np.array_equal(x,y)
 
-def test_valid_plane_finder():
+points=[
+np.array([1,1,-2]),
+np.array([2,3,-5]),
+np.array([-2,-4,6]),
+np.array([1,1,-1]),
+np.array([3,4,-6]),
+np.array([-2,-5,8]),
+np.array([1,-10,-123]),
+np.array([1,7,2]),
+np.array([1,5,6]),
+np.array([2,0,3]),
+np.array([3,545,4]),
+np.array([5,5,6])
+]
 
-	global test_count	
-	print("----------------------------------------------------------------------")
+planes=[
+np.array([1,1,1,0]),
+np.array([1,1,1,-1]),
+np.array([1,0,0,-1]),
+np.array([1,0,-1,1])
+]
 
-	check = True
-	test_count = 0
-	t = time.time()
+class TestPlane(unittest.TestCase):
+	
+	def test_good_points_no_exception(self):
 
-	check *= assertEqual(file.plane_finder(np.array([1,1,-2]),np.array([2,3,-5]),np.array([-2,-4,6])),np.array([1,1,1,0]))
-	check *= assertEqual(file.plane_finder(np.array([1,1,-1]),np.array([3,4,-6]),np.array([-2,-5,8])),np.array([1,1,1,-1]))
-	check *= assertEqual(file.plane_finder(np.array([1,-10,-123]),np.array([1,7,2]),np.array([1,5,6])),np.array([1,0,0,-1]))
-	check *= assertEqual(file.plane_finder(np.array([2,0,3]),np.array([3,545,4]),np.array([5,5,6])),np.array([1,0,-1,1]))
+		self.assertTrue(arrayEqual(file.plane_finder(points[0],points[1],points[2]),planes[0]))
+		self.assertTrue(arrayEqual(file.plane_finder(points[3],points[4],points[5]),planes[1]))
+		self.assertTrue(arrayEqual(file.plane_finder(points[6],points[7],points[8]),planes[2]))
+		self.assertTrue(arrayEqual(file.plane_finder(points[9],points[10],points[11]),planes[3]))
 
-	elapsed = time.time() - t
-	print("Ran %d test in %fsec" % (test_count, elapsed))
-	if not check:
-		print("1 or more tests failed")
-	else:
-		print("All OK")
+	def test_same_points_raise_exception(self):
 
-def test_invalid_plane_finder():
+		self.assertRaises(ValueError, file.plane_finder(points[0], points[0], points[3]))
+		self.assertRaises(ValueError, file.plane_finder(points[0], points[3], points[3]))			   
+                self.assertRaises(ValueError, file.plane_finder(points[3], points[0], points[3]))		      
+                self.assertRaises(ValueError, file.plane_finder(points[0], points[0], points[0]))
 
-	global test_count	
-	print("----------------------------------------------------------------------")
+	def test_colinear_points_raise_exception(self):
 
-	check = True
-	test_count = 0
-	t = time.time()
+		self.assertRaises(ValueError, file.plane_finder(points[0], 2*points[0], points[3]))
+		self.assertRaises(ValueError, file.plane_finder(points[0], 2*points[0], 4*points[0]))
+		self.assertRaises(ValueError, file.plane_finder(points[0], points[3], 2*points[0]))
+		self.assertRaises(ValueError, file.plane_finder(points[3], points[0], -1*points[3]))
+	
+	def test_distance_to_plane(self):
 
-	check *= assertEqual(file.plane_finder(np.array([1,1,1]),np.array([2,2,2]),np.array([-1,0,1])), None)
-	check *= assertEqual(file.plane_finder(np.array([2,2,2]),np.array([4,4,4]),np.array([5,5,5])), None)
-	check *= assertEqual(file.plane_finder(np.array([1,1,1]),np.array([3,5,6]),np.array([1,1,1])), None)
-	check *= assertEqual(file.plane_finder(np.array([1,1,1]),np.array([1,1,1]),np.array([1,1,1])), None)
+		self.assertEqual(file.distance_to_plane(planes[0], points[0]), 0)
+		self.assertEqual(file.distance_to_plane(planes[2], points[1]), 1)
+		self.assertEqual(file.distance_to_plane(planes[2], points[11]), 4)
+		self.assertEqual(file.distance_to_plane(planes[2], points[10]), 2)
 
-	elapsed = time.time() - t
-	print("Ran %d test in %fsec" % (test_count, elapsed))
-	if not check:
-		print("1 or more tests failed")
-	else:
-		print("All OK")
+	def test_closest_point_to_plane(self):
+
+		for pt in points:
+			for pl in planes:
+				self.assertAlmostEqual(file.distance_to_plane(pl, pt), file.distance_finder(pt, file.closest_point_to_plane(pl, pt)), places=5)
+
+centers=[
+np.array([0,0,0]),
+np.array([0.5,-1,0]),
+np.array([-1,-1,-1]),
+np.array([1,1,1]),
+np.array([-1,-2,2]),
+np.array([1,2,-2]),
+np.array([0.1,0.1,-1]),
+]
+
+radius=[
+1,
+2,
+4,
+7,
+.3,
+2.5,
+4.44,
+8.0
+]
+
+points_=[
+np.array([10,10,10]),
+np.array([11.2,2,3]),
+np.array([3,-10,1.33]),
+np.array([1.0,86.0,13.4]),
+np.array([-10,-10,-10]),
+np.array([0.33,22.3,55.322]),
+np.array([4.132,-1.2434,2.2]),
+np.array([3.14,1.59,2.65]),
+
+]
+class TestSphere(unittest.TestCase):
+	def test_sphere_closest_point(self):
+		for center in centers:
+			for point in points_:
+				for r in radius:
+					self.assertAlmostEqual(file.distance_finder(file.sphere_closest_point(point, center, r), point), abs(file.distance_finder(point, center)-r),places=5)
+
 
 
 if __name__ == '__main__':
-	test_valid_plane_finder()
-	test_invalid_plane_finder()
+	unittest.main()
