@@ -52,7 +52,7 @@
 
 //For Nuitrack SDK
 #include "nuitrack/Nuitrack.h"
-#define KEY_JOINT_TO_TRACK    JOINT_LEFT_COLLAR // JOINT_TORSO // JOINT_NECK
+#define KEY_JOINT_TO_TRACK JOINT_LEFT_COLLAR // JOINT_TORSO // JOINT_NECK
 
 // For Face JSON parsing
 #include <boost/property_tree/ptree.hpp>
@@ -63,6 +63,9 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/point_cloud2_iterator.h>
 //#include <pcl/point_types.h>
+
+// Frames to capture for background segmentation in the beginning 
+#define STATIC_FRAMES_TO_CAPTURE "20"
 
 const bool ENABLE_PUBLISHING_FRAMES = true;
 
@@ -833,7 +836,8 @@ namespace nuitrack_body_tracker
       // Align depth and color 
       Nuitrack::setConfigValue("DepthProvider.Depth2ColorRegistration", "true");
       Nuitrack::setConfigValue("Segmentation.Background.BackgroundMode", "static_first_frame"); 
-      Nuitrack::setConfigValue("Segmentation.Background.CalibrationFramesNumber", "20");
+      Nuitrack::setConfigValue("Segmentation.Background.CalibrationFramesNumber", STATIC_FRAMES_TO_CAPTURE);
+
       // Realsense Depth Module - force to 848x480 @ 60 FPS
       Nuitrack::setConfigValue("Realsense2Module.Depth.Preset", "5");
       Nuitrack::setConfigValue("Realsense2Module.Depth.RawWidth", "848");
