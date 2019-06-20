@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-import roslib
-import sys
 import rospy
 import cv2
 
